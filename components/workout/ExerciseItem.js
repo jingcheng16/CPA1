@@ -3,7 +3,7 @@ import { StyleSheet, Button, Text, View, TextInput, Image, ScrollView, FlatList,
 
 const ExerciseItem = (props) => {
     return (
-        <TouchableOpacity activeOpacity= {0.7}>
+        <TouchableOpacity activeOpacity= {0.7} onPress = {props.onDelete.bind(this, props.id)}>
             <View style={styles.listItem}>
                 <Text>{props.title}</Text>
             </View>

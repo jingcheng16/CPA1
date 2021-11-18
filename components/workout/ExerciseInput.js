@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Modal } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Modal, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import Input from '../Input';
 
 const ExerciseInput = props => {
     const [enteredExercise, setEnteredExercise] = useState('');
@@ -13,12 +14,20 @@ const ExerciseInput = props => {
         setEnteredExercise('');
     }
 
+    const cancelHandler = () => {
+        props.onCancel();
+        setEnteredExercise('');
+    }
+
 
 
     return (
         <Modal visible={props.visible} animationType="slide">
+            <TouchableWithoutFeedback onPress = {
+                () => {Keyboard.dismiss()}
+            }>
             <View style={styles.inputContainer}>
-                <TextInput
+                <Input
                     placeholder="Exercise"
                     style={styles.input}
                     onChangeText={exerciseInputHandler}
@@ -34,11 +43,13 @@ const ExerciseInput = props => {
                         <Button
                             title="CANCEL"
                             color="red"
-                            onPress={props.onCancel} />
+                            onPress={cancelHandler}
+                            />
                     </View>
                 </View>
 
             </View>
+            </TouchableWithoutFeedback>
         </Modal>
     );
 };
