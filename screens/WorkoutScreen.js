@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Button, Text, View, TextInput, Image, ScrollView, FlatList } from 'react-native';
 
 import ExerciseItem from '../components/workout/ExerciseItem';
 import ExerciseInput from '../components/workout/ExerciseInput';
 import Colors from '../constants/color'
 
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const WorkoutScreen = props => {
@@ -13,7 +13,6 @@ const WorkoutScreen = props => {
     const [exerciseList, setExerciseList] = useState([]);
     const [isAddMode, setIsAddMode] = useState(false);
     
-
 
     const addExerciseHandler = exerciseTitle => {
         if (exerciseTitle != '') {
@@ -33,6 +32,17 @@ const WorkoutScreen = props => {
         setIsAddMode(false);
     }
     
+    const storeData = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@record', jsonValue)
+            console.log('just stored ' + jsonValue)
+        } catch (e) {
+            console.log("error in storeData ")
+            console.dir(e)
+            // saving error
+        }
+    }
 
 
     return (
@@ -44,6 +54,7 @@ const WorkoutScreen = props => {
             data={exerciseList}
             renderItem={itemData => <ExerciseItem id = {itemData.item.id} title={itemData.item.value} onDelete = {removeExerciseHandler}/>}
             />
+            <Button title = "save" onPress = {() => storeData(exerciseList)}/>
 
         </View>
     )

@@ -1,21 +1,26 @@
 import React from 'react';
 import {View, Text, Button, TouchableWithoutFeedbackComponent, StyleSheet} from 'react-native';
-import {AntDesign} from '@expo/vector-icons';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import MyProfileScreen from './MeScreen/MyProfileScreen';
 import StackButton from '../components/StackButton';
 
-const MeScreen = () => {
+import EmailAddressScreen from './MeScreen/EmailAddressScreen';
+import ChangePasswordScreen from './MeScreen/ChangePasswordScreen';
+import FeedbackScreen from './MeScreen/FeedbackScreen';
+import MyProfileScreen from './MeScreen/MyProfileScreen';
+import PreferencesScreen from './MeScreen/PreferencesScreen';
+
+const HomeScreen = ({navigation}) => {
+    console.log({navigation});
+
     return (
-        // FIXME: add a stackNavigator
         <View>
             <View style = {{paddingVertical:10}}>
-                <StackButton>Email Address
-                </StackButton>
-                <StackButton>Change Password</StackButton>
-                <StackButton>Preferences</StackButton>
-                <StackButton onPress = {() => {}}>Body Measurements</StackButton>
-                <StackButton onPress = {() => {}}>Feedback</StackButton>
+                <StackButton onPress = {()=>{navigation.navigate('Email')}}>Email Address</StackButton>
+                <StackButton onPress= {()=>{navigation.navigate('Password')}}>Change Password</StackButton>
+                <StackButton onPress= {()=>{navigation.navigate('Preferences')}}>Preferences</StackButton>
+                <StackButton onPress = {() => {navigation.navigate('Body Measurements')}}>Body Measurements</StackButton>
+                <StackButton onPress = {() => {navigation.navigate('Feedback')}}>Feedback</StackButton>
             </View>
             <View style = {{paddingVertical:10}}>
                 <StackButton>Log Out</StackButton>
@@ -26,6 +31,21 @@ const MeScreen = () => {
     )
 }
 
+const Stack = createNativeStackNavigator();
+
+const App = () =>{
+    return(
+            <Stack.Navigator>
+                <Stack.Screen name="Home" component={HomeScreen} options={{title: "Me"}} />
+                <Stack.Screen name="Email" component={EmailAddressScreen} />
+                <Stack.Screen name="Password" component = {ChangePasswordScreen}/>
+                <Stack.Screen name="Preferences" component={PreferencesScreen} />
+                <Stack.Screen name="Body Measurements" component={MyProfileScreen} />
+                <Stack.Screen name="Feedback" component={FeedbackScreen}/>
+            </Stack.Navigator>
+    )
+}
+
 const styles = StyleSheet.create({});
 
-export default MeScreen;
+export default App;
