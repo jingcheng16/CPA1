@@ -38,12 +38,15 @@ const WorkoutScreen = props => {
     const getCurrentDate=()=>{
 
         let date = new Date().getDate();
+        if (date < 10) {
+            date = "0" + date;
+        }
         let month = new Date().getMonth() + 1;
         let year = new Date().getFullYear();
   
         //Alert.alert(date + '-' + month + '-' + year);
         // You can turn it in to your desired format
-        setCurrentDate(date + '-' + month + '-' + year);
+        setCurrentDate(year + '-' + month + '-' + date);
     }
 
     const storeData = async (value) => {

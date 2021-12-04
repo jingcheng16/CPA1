@@ -2,6 +2,9 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, Button, Text, View, TextInput, Image, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+//https://github.com/wix/react-native-calendars
+import ExerciseItem from '../components/exercise/ExerciseItem';
 
 const LogScreen = () => {
     useEffect(() => {getData()},[])
@@ -38,6 +41,7 @@ const LogScreen = () => {
     const getData = async (value) => {
         try {
             // the '@profile_info' can be any string
+            console.log(value);
             const jsonValue = await AsyncStorage.getItem(value)
             let data = null
             if (jsonValue != null) {
@@ -59,13 +63,20 @@ const LogScreen = () => {
 
     return (
         <View>
-            <Button title="get" onPress={() => getDateList()} />
-            {dateList.map(date => (
+            {/* <Button title="get" onPress={() => getDateList()} /> */}
+            <Calendar 
+                minDate={'2021-11-01'}
+                onDayPress={(day) => {
+                    getData(day.dateString);
+                    setDate(day.dateString)}}
+            />
+            {/* {dateList.map(date => (
                 <TouchableOpacity onPress = {()=> getData(date)}>
                     <Text key={date}>{date}</Text> 
                 </TouchableOpacity>
-            ))}
-            {exerciseList.map(exercise => (<Text key={exercise.id}>{exercise.value}</Text>))}
+            ))} */}
+            <Text>{date}</Text>
+            {exerciseList.map(exercise => (<ExerciseItem key={exercise.id} title = {exercise.value}>{exercise.value}</ExerciseItem>))}
         </View>
 
     )
