@@ -12,7 +12,10 @@ const WorkoutScreen = props => {
     
     const [exerciseList, setExerciseList] = useState([]);
     const [isAddMode, setIsAddMode] = useState(false);
-    
+    const [currentDate, setCurrentDate] = useState("");
+    const [dateList, setDateList] = useState([]);
+
+    useEffect(() => {getCurrentDate()},[]);
 
     const addExerciseHandler = exerciseTitle => {
         if (exerciseTitle != '') {
@@ -32,11 +35,28 @@ const WorkoutScreen = props => {
         setIsAddMode(false);
     }
     
+    const getCurrentDate=()=>{
+
+        let date = new Date().getDate();
+        let month = new Date().getMonth() + 1;
+        let year = new Date().getFullYear();
+  
+        //Alert.alert(date + '-' + month + '-' + year);
+        // You can turn it in to your desired format
+        setCurrentDate(date + '-' + month + '-' + year);
+    }
+
     const storeData = async (value) => {
         try {
             const jsonValue = JSON.stringify(value)
-            await AsyncStorage.setItem('@record', jsonValue)
-            console.log('just stored ' + jsonValue)
+            console.log(currentDate.toString());
+            await AsyncStorage.setItem(currentDate.toString(), jsonValue)
+            console.log('just stored ' +currentDate.toString() +jsonValue)
+            if(dateList.indexOf(currentDate.toString())<0){
+                setDateList([...dateList, currentDate.toString()])
+            }
+            const jsonValue2 = JSON.stringify(dateList);
+            await AsyncStorage.setItem("@dateList", jsonValue2)
         } catch (e) {
             console.log("error in storeData ")
             console.dir(e)

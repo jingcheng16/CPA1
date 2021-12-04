@@ -1,20 +1,44 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Button, Text, View, TextInput, Image, ScrollView } from 'react-native';
-import BodyText from '../components/BodyText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-
-let content = <githubScreen />
 const LogScreen = () => {
     useEffect(() => {getData()},[])
+    useEffect(() => {getDateList()},[])
 
     const [exerciseList, setExerciseList] = useState([]);
+    const [date, setDate] = useState("");
+    const [dateList, setDateList] = useState([]);
+    
 
-
-    const getData = async () => {
+    const getDateList = async () => {
         try {
             // the '@profile_info' can be any string
-            const jsonValue = await AsyncStorage.getItem('@record')
+            const jsonValue = await AsyncStorage.getItem('@dateList')
+            console.log(jsonValue);
+            let data = null
+            if (jsonValue != null) {
+                data = JSON.parse(jsonValue)
+                setDateList(data)
+                console.log('just set Date List')
+            } else {
+                console.log('just read a null date list from Storage')
+                // setDateList([])
+            }
+
+
+        } catch (e) {
+            console.log("error in getData ")
+            console.dir(e)
+            // error reading value
+        }
+    }
+
+    const getData = async (value) => {
+        try {
+            // the '@profile_info' can be any string
+            const jsonValue = await AsyncStorage.getItem(value)
             let data = null
             if (jsonValue != null) {
                 data = JSON.parse(jsonValue)
@@ -33,20 +57,17 @@ const LogScreen = () => {
         }
     }
 
-    return(
+    return (
         <View>
-            <BodyText>
-                Log
-            </BodyText>
-            <Text>
-                Log
-            </Text>
-            <Button title = "get" onPress = {()=> getData()}/>
-            <Text>
-                {JSON.stringify({exerciseList})}
-            </Text>
+            <Button title="get" onPress={() => getDateList()} />
+            {dateList.map(date => (
+                <TouchableOpacity onPress = {()=> getData(date)}>
+                    <Text key={date}>{date}</Text> 
+                </TouchableOpacity>
+            ))}
+            {exerciseList.map(exercise => (<Text key={exercise.id}>{exercise.value}</Text>))}
         </View>
-        
+
     )
 }
 
