@@ -3,26 +3,27 @@ import { StyleSheet, Button, Text, View, TextInput, Image, ScrollView, FlatList 
 
 import ExerciseItem from '../components/workout/ExerciseItem';
 import ExerciseInput from '../components/workout/ExerciseInput';
-import Colors from '../constants/color'
+import Colors from '../constants/color';
+import { useValue } from '../components/ValueContext';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const WorkoutScreen = props => {
-    
+
     const [exerciseList, setExerciseList] = useState([]);
     const [isAddMode, setIsAddMode] = useState(false);
     const [currentDate, setCurrentDate] = useState("");
     const [dateList, setDateList] = useState([]);
 
-    useEffect(() => {getCurrentDate()},[]);
+    useEffect(() => { getCurrentDate() }, []);
 
     const addExerciseHandler = exerciseTitle => {
         if (exerciseTitle != '') {
-        setExerciseList(currentList => [...currentList, { id: Math.random().toString(), value: exerciseTitle }]);
+            setExerciseList(currentList => [...currentList, { id: Math.random().toString(), value: exerciseTitle }]);
         }
         setIsAddMode(false);
-        
+
     };
 
     const removeExerciseHandler = exerciseId => {
@@ -34,8 +35,8 @@ const WorkoutScreen = props => {
     const cancelExerciseAdditionHandler = () => {
         setIsAddMode(false);
     }
-    
-    const getCurrentDate=()=>{
+
+    const getCurrentDate = () => {
 
         let date = new Date().getDate();
         if (date < 10) {
@@ -43,7 +44,7 @@ const WorkoutScreen = props => {
         }
         let month = new Date().getMonth() + 1;
         let year = new Date().getFullYear();
-  
+
         //Alert.alert(date + '-' + month + '-' + year);
         // You can turn it in to your desired format
         setCurrentDate(year + '-' + month + '-' + date);
@@ -54,8 +55,8 @@ const WorkoutScreen = props => {
             const jsonValue = JSON.stringify(value)
             console.log(currentDate.toString());
             await AsyncStorage.setItem(currentDate.toString(), jsonValue)
-            console.log('just stored ' +currentDate.toString() +jsonValue)
-            if(dateList.indexOf(currentDate.toString())<0){
+            console.log('just stored ' + currentDate.toString() + jsonValue)
+            if (dateList.indexOf(currentDate.toString()) < 0) {
                 setDateList([...dateList, currentDate.toString()])
             }
             const jsonValue2 = JSON.stringify(dateList);
@@ -69,15 +70,15 @@ const WorkoutScreen = props => {
 
 
     return (
-        <View style = {styles.screen}>
-            <Button title = "Add new Exercise" onPress = {()=> setIsAddMode(true)}/>
-            <ExerciseInput visible = {isAddMode} onAddExercise = {addExerciseHandler} onCancel = {cancelExerciseAdditionHandler}/>
-            <FlatList 
-            keyExtractor = {(item, index) => item.id}
-            data={exerciseList}
-            renderItem={itemData => <ExerciseItem id = {itemData.item.id} title={itemData.item.value} onDelete = {removeExerciseHandler}/>}
+        <View style={styles.screen}>
+            <Button title="Add new Exercise" onPress={() => setIsAddMode(true)} />
+            <ExerciseInput visible={isAddMode} onAddExercise={addExerciseHandler} onCancel={cancelExerciseAdditionHandler} />
+            <FlatList
+                keyExtractor={(item, index) => item.id}
+                data={exerciseList}
+                renderItem={itemData => <ExerciseItem id={itemData.item.id} title={itemData.item.value} onDelete={removeExerciseHandler} />}
             />
-            <Button title = "save" onPress = {() => storeData(exerciseList)}/>
+            <Button title="save" onPress={() => storeData(exerciseList)} />
 
         </View>
     )
@@ -86,7 +87,7 @@ const WorkoutScreen = props => {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        padding: 10, 
+        padding: 10,
         alignItems: 'center',
     },
     horizontal: {

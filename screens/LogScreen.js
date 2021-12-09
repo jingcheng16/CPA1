@@ -66,6 +66,7 @@ const LogScreen = () => {
             {/* <Button title="get" onPress={() => getDateList()} /> */}
             <Calendar 
                 minDate={'2021-11-01'}
+                maxDate = {new Date()}
                 onDayPress={(day) => {
                     getData(day.dateString);
                     setDate(day.dateString)}}
